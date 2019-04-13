@@ -10,7 +10,7 @@ function preload() {
 
     //game.load.tilemap('map', 'assets/tilemaps/level.csv', null, Phaser.Tilemap.CSV);
     game.load.image('tiles', 'assets/tilemaps/tiles.png');
-    game.load.spritesheet('player', 'assets-misc/sprites/spaceman.png', 16, 16);
+    game.load.spritesheet('player', 'assets/player.png', 45, 45);
 
 }
 
@@ -45,14 +45,14 @@ function create() {
 
     //  Player
     player = game.add.sprite(48, 48, 'player', 1);
-    player.animations.add('left', [8,9], 10, true);
-    player.animations.add('right', [1,2], 10, true);
-    player.animations.add('up', [11,12,13], 10, true);
-    player.animations.add('down', [4,5,6], 10, true);
+    player.animations.add('left', [0,1,2,3,4], 10, true);
+    player.animations.add('right', [5,6,7,8,9], 10, true);
+    player.animations.add('up', [10,11,12,13,14], 10, true);
+    player.animations.add('down', [15,16,17,18,19], 10, true);
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
-    player.body.setSize(10, 14, 2, 1);
+    player.body.setSize(26, 32, 10, 5);
 
     game.camera.follow(player);
 
