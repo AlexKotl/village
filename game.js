@@ -18,6 +18,7 @@ var map;
 var layer;
 var cursors;
 var player;
+var marker;
 
 function create() {
 
@@ -27,20 +28,20 @@ function create() {
     game.stage.backgroundColor = '#2d2d2d';
     
     // generate map
-    layer_ground = map.create('level1', 50, 50, 32, 32);
+    layer = map.create('level1', 50, 50, 32, 32);
     
     for (var i=0; i<50; i++) {
         for (var j=0; j<50; j++) {
-            map.putTile((Math.random() > 0.8 ? 14 : 6), i, j, layer_ground);
+            map.putTile((Math.random() > 0.8 ? 14 : 6), i, j, layer);
         }
     }
     
-    layer_ground.resizeWorld();
+    layer.resizeWorld();
 
     //  This isn't totally accurate, but it'll do for now
     map.setCollisionBetween(10, 20);
 
-    //layer_ground.debug = true;
+    //layer.debug = true;
 
     //  Player
     player = game.add.sprite(48, 48, 'player', 1);
@@ -59,37 +60,39 @@ function create() {
 
     var title_text = game.add.text(16, 16, 'The Village', { font: '14px Arial', fill: '#ffffff' });
     title_text.fixedToCamera = true;
+    
+    marker = game.add.graphics();
+    marker.lineStyle(2, 0x000000, 1);
+    marker.drawRect(0, 0, 32, 32);
 
 }
 
 function update() {
+    
+    marker.x = layer.getTileX(player.x) * 32;
+    marker.y = layer.getTileY(player.y) * 32;
 
     game.physics.arcade.collide(player, layer);
 
     player.body.velocity.set(0);
 
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
         player.body.velocity.x = -100;
         player.play('left');
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown) {
         player.body.velocity.x = 100;
         player.play('right');
     }
-    else if (cursors.up.isDown)
-    {
+    else if (cursors.up.isDown) {
         player.body.velocity.y = -100;
         player.play('up');
     }
-    else if (cursors.down.isDown)
-    {
+    else if (cursors.down.isDown) {
         player.body.velocity.y = 100;
         player.play('down');
     }
-    else
-    {
+    else {
         player.animations.stop();
     }
 
