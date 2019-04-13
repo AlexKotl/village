@@ -95,6 +95,11 @@ function update() {
     else {
         player.animations.stop();
     }
+    
+    // adding to map
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        map.putTile(3, layer.getTileX(marker.x), layer.getTileY(marker.y));
+    }
 
 }
 
