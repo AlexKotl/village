@@ -1,16 +1,30 @@
-
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { 
-    preload: preload, 
-    create: create, 
-    update: update, 
-    render: render,
-});
+var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 200 }
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update,
+        }
+    };
+    
+var game = new Phaser.Game(config);
 
 function preload() {
 
     //game.load.tilemap('map', 'assets/tilemaps/level.csv', null, Phaser.Tilemap.CSV);
-    game.load.image('tiles', 'assets/tilemaps/tiles.png');
-    game.load.spritesheet('player', 'assets/player.png', 45, 45);
+    this.load.image('tiles', 'assets/tilemaps/tiles.png');
+    this.load.spritesheet('player', 'assets/player.png', {
+        frameWidth: 45, 
+        frameHeight: 45,
+    });
 
 }
 
@@ -22,10 +36,10 @@ var marker;
 
 function create() {
 
-    map = game.add.tilemap();
+    map = this.add.tilemap();
     map.addTilesetImage('tiles');
     
-    game.stage.backgroundColor = '#2d2d2d';
+    //this.stage.backgroundColor = '#2d2d2d';
     
     // generate map
     layer = map.create('level1', 50, 50, 32, 32);
@@ -44,17 +58,17 @@ function create() {
     //layer.debug = true;
 
     //  Player
-    player = game.add.sprite(48, 48, 'player', 1);
+    player = this.add.sprite(48, 48, 'player', 1);
     player.animations.add('left', [0,1,2,3,4], 10, true);
     player.animations.add('right', [5,6,7,8,9], 10, true);
     player.animations.add('up', [10,11,12,13,14], 10, true);
     player.animations.add('down', [15,16,17,18,19], 10, true);
 
-    game.physics.enable(player, Phaser.Physics.ARCADE);
+    this.physics.enable(player, Phaser.Physics.ARCADE);
 
     player.body.setSize(26, 26, 10, 12);
 
-    game.camera.follow(player);
+    this.camera.follow(player);
 
     cursors = game.input.keyboard.createCursorKeys();
     
