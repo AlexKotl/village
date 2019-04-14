@@ -4,12 +4,12 @@ var config = {
         height: 600,
         parent: 'phaser-game',
         pixelArt: true,
-        // physics: {
-        //     default: 'arcade',
-        //     arcade: {
-        //         gravity: { y: 200 }
-        //     }
-        // },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 }
+            }
+        },
         scene: {
             preload: preload,
             create: create,
@@ -61,26 +61,47 @@ function create() {
 
     //layer.debug = true;
 
-    //  Player
-    // player = this.add.sprite(48, 48, 'player', 1);
-    // player.animations.add('left', [0,1,2,3,4], 10, true);
-    // player.animations.add('right', [5,6,7,8,9], 10, true);
-    // player.animations.add('up', [10,11,12,13,14], 10, true);
-    // player.animations.add('down', [15,16,17,18,19], 10, true);
     // 
     // this.physics.enable(player, Phaser.Physics.ARCADE);
     // 
     // player.body.setSize(26, 26, 10, 12);
     // 
     // this.camera.follow(player);
-    // 
-    // cursors = game.input.keyboard.createCursorKeys();
+    
+    cursors = this.input.keyboard.createCursorKeys();
     // 
     // marker = game.add.graphics();
     // marker.lineStyle(2, 0x000000, 1);
     // marker.drawRect(0, 0, 32, 32);
 
     //buildGUI();
+    
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 4 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('player', { start: 5, end: 9 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'up',
+        frames: this.anims.generateFrameNumbers('player', { start: 10, end: 14 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'down',
+        frames: this.anims.generateFrameNumbers('player', { start: 15, end: 19 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    
+    player = this.physics.add.sprite(50, 100, 'player', 1);
 }
 
 function update() {
@@ -90,27 +111,47 @@ function update() {
     // 
     // game.physics.arcade.collide(player, layer);
     // 
-    // player.body.velocity.set(0);
-    // 
-    // if (cursors.left.isDown) {
-    //     player.body.velocity.x = -100;
-    //     player.play('left');
-    // }
-    // else if (cursors.right.isDown) {
-    //     player.body.velocity.x = 100;
-    //     player.play('right');
-    // }
-    // else if (cursors.up.isDown) {
-    //     player.body.velocity.y = -100;
-    //     player.play('up');
-    // }
-    // else if (cursors.down.isDown) {
-    //     player.body.velocity.y = 100;
-    //     player.play('down');
-    // }
-    // else {
-    //     player.animations.stop();
-    // }
+    player.body.setVelocity(0);
+
+    if (cursors.left.isDown)
+    {
+        player.body.setVelocityX(-100);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.body.setVelocityX(100);
+    }
+
+    // Vertical movement
+    if (cursors.up.isDown)
+    {
+        player.body.setVelocityY(-100);
+    }
+    else if (cursors.down.isDown)
+    {
+        player.body.setVelocityY(100);
+    }
+    
+    if (cursors.left.isDown)
+    {
+        player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.anims.play('right', true);
+    }
+    else if (cursors.up.isDown)
+    {
+        player.anims.play('up', true);
+    }
+    else if (cursors.down.isDown)
+    {
+        player.anims.play('down', true);
+    }
+    else
+    {
+        player.anims.stop();
+    }
     
     // adding to map
     // if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
