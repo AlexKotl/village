@@ -27,14 +27,11 @@ var marker;
 const game = new Phaser.Game(config);
 
 function preload() {
-
-    //game.load.tilemap('map', 'assets/tilemaps/level.csv', null, Phaser.Tilemap.CSV);
     this.load.image('tiles', 'assets/tilemaps/tiles.png');
     this.load.spritesheet('player', 'assets/player.png', {
         frameWidth: 45, 
         frameHeight: 45,
     });
-
 }
 
 function generateLevel() {
@@ -55,24 +52,9 @@ function create() {
     
     // generate map
     layer = map.createStaticLayer(0, tiles);
-    
-    //  This isn't totally accurate, but it'll do for now
-    //map.setCollisionBetween(10, 20);
-
-    //layer.debug = true;
-
-    // 
-    // this.physics.enable(player, Phaser.Physics.ARCADE);
-    // 
-    // player.body.setSize(26, 26, 10, 12);
-    // 
-    // this.camera.follow(player);
+    map.setCollisionBetween(10, 20);
     
     cursors = this.input.keyboard.createCursorKeys();
-    // 
-    // marker = game.add.graphics();
-    // marker.lineStyle(2, 0x000000, 1);
-    // marker.drawRect(0, 0, 32, 32);
 
     //buildGUI();
     
@@ -102,6 +84,12 @@ function create() {
     });
     
     player = this.physics.add.sprite(50, 100, 'player', 1);
+    player.body.setSize(26, 26, 10, 12);
+    
+    this.physics.add.collider(player, layer);
+
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(player);
 }
 
 function update() {
@@ -171,10 +159,4 @@ function buildGUI() {
     titleText.fixedToCamera = true;
     
     console.log('GUI inited');
-}
-
-function render() {
-
-    // game.debug.body(player);
-
 }
