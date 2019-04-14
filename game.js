@@ -52,19 +52,17 @@ function create() {
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
-    player.body.setSize(26, 32, 10, 5);
+    player.body.setSize(26, 26, 10, 12);
 
     game.camera.follow(player);
 
     cursors = game.input.keyboard.createCursorKeys();
-
-    var title_text = game.add.text(16, 16, 'The Village', { font: '14px Arial', fill: '#ffffff' });
-    title_text.fixedToCamera = true;
     
     marker = game.add.graphics();
     marker.lineStyle(2, 0x000000, 1);
     marker.drawRect(0, 0, 32, 32);
 
+    buildGUI();
 }
 
 function update() {
@@ -101,6 +99,19 @@ function update() {
         map.putTile(3, layer.getTileX(marker.x), layer.getTileY(marker.y));
     }
 
+}
+
+function buildGUI() {
+    var tileSelectorBackground = game.add.graphics();
+    tileSelectorBackground.beginFill(0x000000, 0.5);
+    tileSelectorBackground.drawRect(0, 0, 800, 34);
+    tileSelectorBackground.endFill();
+    tileSelectorBackground.fixedToCamera = true;
+    
+    var titleText = game.add.text(16, 8, 'The Village', { font: 'bold 16px Arial', fill: '#ffffff' });
+    titleText.fixedToCamera = true;
+    
+    console.log('GUI inited');
 }
 
 function render() {
