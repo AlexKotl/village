@@ -2,6 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 var definePlugin = new webpack.DefinePlugin({
   WEBGL_RENDERER: true,
@@ -49,7 +50,10 @@ module.exports = {
       server: {
         baseDir: "./public"
       }
-    })
+    }), 
+    new CopyPlugin([
+      { from: './assets', to: './assets' },
+    ]),
   ],
   module: {
     rules: [
