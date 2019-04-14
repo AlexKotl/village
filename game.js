@@ -56,8 +56,6 @@ function create() {
     
     cursors = this.input.keyboard.createCursorKeys();
 
-    //buildGUI();
-    
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('player', { start: 0, end: 4 }),
@@ -90,6 +88,12 @@ function create() {
 
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.startFollow(player);
+    
+    // GUI
+    var graphics = this.add.graphics();
+    graphics.fillStyle(0x000000, 0.5);
+    graphics.fillRect(0, 0, 800, 34);
+    graphics.setScrollFactor(0);
 }
 
 function update() {
@@ -148,15 +152,3 @@ function update() {
 
 }
 
-function buildGUI() {
-    var tileSelectorBackground = game.add.graphics();
-    tileSelectorBackground.beginFill(0x000000, 0.5);
-    tileSelectorBackground.drawRect(0, 0, 800, 34);
-    tileSelectorBackground.endFill();
-    tileSelectorBackground.fixedToCamera = true;
-    
-    var titleText = game.add.text(16, 8, 'The Village', { font: 'bold 16px Arial', fill: '#ffffff' });
-    titleText.fixedToCamera = true;
-    
-    console.log('GUI inited');
-}
