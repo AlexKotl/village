@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import Player from '../objects/player'
-//import GameAnimations from '../objects/game-animations'
+import GUI from '../objects/gui'
 
 class GameScene extends Phaser.Scene {
     
@@ -53,10 +53,7 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         
         // GUI
-        var graphics = this.add.graphics();
-        graphics.fillStyle(0x000000, 0.5);
-        graphics.fillRect(0, 0, 800, 34);
-        graphics.setScrollFactor(0);
+        this.gui = new GUI(this);
     }
     
     update() {
