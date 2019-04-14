@@ -105,43 +105,34 @@ function update() {
     // 
     player.body.setVelocity(0);
 
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
         player.body.setVelocityX(-100);
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown) {
         player.body.setVelocityX(100);
     }
 
     // Vertical movement
-    if (cursors.up.isDown)
-    {
+    if (cursors.up.isDown) {
         player.body.setVelocityY(-100);
     }
-    else if (cursors.down.isDown)
-    {
+    else if (cursors.down.isDown) {
         player.body.setVelocityY(100);
     }
     
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
         player.anims.play('left', true);
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown) {
         player.anims.play('right', true);
     }
-    else if (cursors.up.isDown)
-    {
+    else if (cursors.up.isDown) {
         player.anims.play('up', true);
     }
-    else if (cursors.down.isDown)
-    {
+    else if (cursors.down.isDown) {
         player.anims.play('down', true);
     }
-    else
-    {
+    else {
         player.anims.stop();
     }
     
