@@ -37,9 +37,9 @@ class GameScene extends Phaser.Scene {
         this.map.setCollisionBetween(10, 20);
         
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors.nextItem = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+        this.cursors.prevItem = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
 
-        
-        
         this.player = new Player({
             scene: this,
             x: 50,
@@ -59,6 +59,7 @@ class GameScene extends Phaser.Scene {
     update() {
     
         this.player.update();
+        this.gui.update();
 
     }
 }
