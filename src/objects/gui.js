@@ -15,20 +15,10 @@ export default class GUI {
             fill: '#ffffff'
         });
         help.setScrollFactor(0);
-        
-        this.displayCurrentTile();
     }
     
     update() {
-        if (Phaser.Input.Keyboard.JustDown(this.scene.cursors.nextItem)) {
-            console.log('NEXT')
-        }
-        if (Phaser.Input.Keyboard.JustDown(this.scene.cursors.prevItem)) {
-            console.log('prev')
-        }
+        
     }
     
-    displayCurrentTile() {
-        this.scene.map.putTileAt(1, 100, 100);
-    }
 }

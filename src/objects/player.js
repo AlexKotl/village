@@ -4,6 +4,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         config.scene.physics.world.enable(this);
         config.scene.add.existing(this);
         
+        this.scene = config.scene;
+        this.item = 1;
         this.body.setSize(26, 26, 10, 12);
         
         // animations
@@ -66,6 +68,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
         else {
             this.anims.stop();
         }
+        
+        if (Phaser.Input.Keyboard.JustDown(this.scene.cursors.nextItem)) {
+            console.log('NEXT')
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.scene.cursors.prevItem)) {
+            console.log('prev')
+        }
+        
+        //this.scene.build.putTileAt(this.item, 10, 10);
     }
     
     setAnimations() {

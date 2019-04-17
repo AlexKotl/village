@@ -33,8 +33,11 @@ class GameScene extends Phaser.Scene {
         const tiles = this.map.addTilesetImage('tiles', null, 32, 32);
         
         // generate map
-        this.layer = this.map.createStaticLayer(0, tiles);
+        this.ground = this.map.createStaticLayer(0, tiles);
         this.map.setCollisionBetween(10, 20);
+        this.build = this.map.createBlankDynamicLayer('build', tiles);
+        
+        this.map.putTileAt(1, 10, 10);
         
         this.cursors = this.input.keyboard.createCursorKeys();
         this.cursors.nextItem = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
@@ -47,7 +50,7 @@ class GameScene extends Phaser.Scene {
             key: 'player',
         }); 
         
-        this.physics.add.collider(this.player, this.layer);
+        this.physics.add.collider(this.player, this.ground);
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player);
