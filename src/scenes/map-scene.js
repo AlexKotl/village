@@ -21,7 +21,9 @@ export default class MapScene extends Phaser.Scene {
             for (let y=0; y<height; y++) {
                 let val = simplex.noise2D(x * freq, y * freq) 
                     + simplex.noise2D(x * freq * 0.3, y * freq * 0.2); // add more details
-                map[x][y] = val > 0 ? 1 : 2;
+                let texture = val > 0 ? 1 : 2;
+                if (val > 0.5) texture = 3;
+                map[x][y] = texture;
             }
         }
         console.log(map);
