@@ -56,7 +56,9 @@ module.exports = {
       { from: './assets/sprites', to: './assets/sprites' },
     ]),
     new WebpackFreeTexPacker(path.resolve(__dirname, 'assets/tiles'), 'assets', {
-      textureName: 'tilemap'
+      textureName: 'tilemap',
+      removeFileExtension: true,
+      prependFolderName: false,
     }),
   ],
   module: {
