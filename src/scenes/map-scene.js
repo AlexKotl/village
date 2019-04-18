@@ -22,7 +22,7 @@ export default class MapScene extends Phaser.Scene {
                 let val = simplex.noise2D(x * freq, y * freq) 
                     + simplex.noise2D(x * freq * 0.3, y * freq * 0.2); // add more details
                 let texture = val > 0 ? 1 : 2;
-                if (val > 0.5) texture = 3;
+                if (val > 0.5) texture = 0;
                 map[x][y] = texture;
             }
         }
@@ -37,7 +37,7 @@ export default class MapScene extends Phaser.Scene {
         // generate map
         this.ground = this.map.createStaticLayer(0, tiles);
         
-        this.cameras.main.zoom = 0.5;
+        this.cameras.main.zoom = 1;
         
         const cursors = this.input.keyboard.createCursorKeys();
 

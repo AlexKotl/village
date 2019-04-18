@@ -8,7 +8,7 @@ var config = {
     height: 600,
     parent: 'phaser-game',
     pixelArt: true,
-    zoom: 1,
+    zoom: 2,
     physics: {
         default: 'arcade',
         arcade: {
