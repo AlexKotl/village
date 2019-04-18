@@ -3,6 +3,7 @@ var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const WebpackFreeTexPacker = require('webpack-free-tex-packer');
 
 var definePlugin = new webpack.DefinePlugin({
   WEBGL_RENDERER: true,
@@ -52,8 +53,11 @@ module.exports = {
       }
     }), 
     new CopyPlugin([
-      { from: './assets', to: './assets' },
+      { from: './assets/sprites', to: './assets/sprites' },
     ]),
+    new WebpackFreeTexPacker(path.resolve(__dirname, 'assets/tiles'), 'assets', {
+      textureName: 'tilemap'
+    }),
   ],
   module: {
     rules: [
