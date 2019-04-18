@@ -8,7 +8,7 @@ export default class MapScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('tiles', 'assets/tilemaps/tiles.png');
+        this.load.image('tiles', 'assets/tilemap.png');
     }
     
     generateMap(width, height) {
@@ -31,13 +31,13 @@ export default class MapScene extends Phaser.Scene {
     }
 
     create() {
-        this.map = this.make.tilemap({ data: this.generateMap(100, 100), tileWidth: 32, tileHeight: 32 });
-        const tiles = this.map.addTilesetImage('tiles', null, 32, 32);
+        this.map = this.make.tilemap({ data: this.generateMap(100, 100), tileWidth: 16, tileHeight: 16 });
+        const tiles = this.map.addTilesetImage('tiles', null, 16, 16);
         
         // generate map
         this.ground = this.map.createStaticLayer(0, tiles);
         
-        this.cameras.main.zoom = 0.3;
+        this.cameras.main.zoom = 0.5;
         
         const cursors = this.input.keyboard.createCursorKeys();
 
