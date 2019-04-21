@@ -11,8 +11,19 @@ export default class MapScene extends Phaser.Scene {
         this.load.image('tiles', 'assets/tilesets/tiles.png');
     }
     
-    tileNum() {
-        
+    tileNum(name) {
+        tiles = {
+            water: 10086,
+            ground: 12601,
+            groundWaterTop: 12481,
+            groundWaterTopRight: 12482,
+            groundWaterRight: 12602,
+            groundWaterBottomRight: 12722,
+            groundWaterBottom: 12721,
+            groundWaterBottomLeft: 12720,
+            groundWaterLeft: 12600,
+            groundWaterTopLeft: 12480,
+        };
     }
     
     generateMap(width, height) {
@@ -25,7 +36,7 @@ export default class MapScene extends Phaser.Scene {
             for (let y=0; y<height; y++) {
                 let val = simplex.noise2D(x * freq, y * freq) 
                     + simplex.noise2D(x * freq * 0.3, y * freq * 0.2); // add more details
-                let texture = val > 0 ? 100 : 200;
+                let texture = val > 0 ? 10215 : 10086;
                 if (val > 0.5) texture = 0;
                 map[x][y] = texture;
             }
