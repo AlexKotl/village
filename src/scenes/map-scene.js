@@ -8,7 +8,11 @@ export default class MapScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('tiles', 'assets/tilemap.png');
+        this.load.image('tiles', 'assets/tilesets/tiles.png');
+    }
+    
+    tileNum() {
+        
     }
     
     generateMap(width, height) {
@@ -21,12 +25,11 @@ export default class MapScene extends Phaser.Scene {
             for (let y=0; y<height; y++) {
                 let val = simplex.noise2D(x * freq, y * freq) 
                     + simplex.noise2D(x * freq * 0.3, y * freq * 0.2); // add more details
-                let texture = val > 0 ? 1 : 2;
+                let texture = val > 0 ? 100 : 200;
                 if (val > 0.5) texture = 0;
                 map[x][y] = texture;
             }
         }
-        console.log(map);
         return map;
     }
 
