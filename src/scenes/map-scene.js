@@ -196,13 +196,13 @@ export default class MapScene extends Phaser.Scene {
         let dataCopy = data;
 
         data = this.processCorners(data);
-        data.push(...dataCopy);
+        //data.push(...dataCopy);
         console.table(data);
         return data;
     }
 
     create() {
-        this.map = this.make.tilemap({ data: this.generateTiles(10, 10), tileWidth: 16, tileHeight: 16 });
+        this.map = this.make.tilemap({ data: this.generateTiles(100, 100), tileWidth: 16, tileHeight: 16 });
         const tiles = this.map.addTilesetImage('tiles', null, 16, 16);
         
         // generate map
