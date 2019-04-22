@@ -155,8 +155,10 @@ export default class MapScene extends Phaser.Scene {
     generateTiles(width, height) {
         let data = this.generateMap(width, height);
         data = this.doubleMap(data);
-        console.table(data);
+        let dataCopy = data;
+
         data = this.processCorners(data);
+        data.push(...dataCopy);
         console.table(data);
         return data;
     }
