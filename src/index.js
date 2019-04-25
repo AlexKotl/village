@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import GameScene from './scenes/game-scene';
 import MapScene from './scenes/map-scene';
+import BlocksScene from './scenes/blocks-scene';
     
 var config = {
     type: Phaser.AUTO,
@@ -8,14 +9,15 @@ var config = {
     height: 600,
     parent: 'phaser-game',
     pixelArt: true,
-    zoom: 2,
+    zoom: 1,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 }
+            debug: true,
+            //gravity: { y: 0 }
         }
     },
-    scene: [MapScene, GameScene]
+    scene: [BlocksScene, MapScene, GameScene]
 };
 
 var game = new Phaser.Game(config);
