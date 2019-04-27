@@ -12,8 +12,8 @@ export default class BlocksScene extends Phaser.Scene {
     
     getMapPosition(x, y) {
         return {
-            x: Math.round(x / this.blockSize) - 1,
-            y: Math.round(y / this.blockSize) - 1,
+            x: Math.round(x / this.blockSize + 0.5) - 1,
+            y: Math.round(y / this.blockSize + 0.5) - 1,
         }
     }
     
@@ -49,10 +49,10 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         return {
-            top: top * this.blockSize,
-            bottom: bottom * this.blockSize,
-            left: left * this.blockSize,
-            right: right * this.blockSize,
+            top: top,
+            bottom: bottom,
+            left: left,
+            right: right,
         }
     }
 
@@ -70,7 +70,8 @@ export default class BlocksScene extends Phaser.Scene {
         for (let y=0; y<this.board.length; y++) {
             for (let x=0; x<this.board[y].length; x++) {
                 if (this.board[x][y] > 0) {
-                    let block = this.add.sprite(y * this.blockSize + 50, x * this.blockSize + 50, 'block');
+                    let block = this.add.sprite(y * this.blockSize, x * this.blockSize, 'block');
+                    block.setOrigin(0);
                     this.input.setDraggable(block.setInteractive());
                 }
             }
@@ -124,7 +125,7 @@ export default class BlocksScene extends Phaser.Scene {
 
         this.input.on('dragend', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
-            obj.setPosition(mapPos.x * this.blockSize + 50, mapPos.y * this.blockSize + 50);
+            obj.setPosition(mapPos.x * this.blockSize, mapPos.y * this.blockSize);
         });
 
     }
