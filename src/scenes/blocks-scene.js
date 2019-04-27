@@ -18,11 +18,41 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     getAllowedMoves(x, y) {
+        let bottom = 0;
+        let top = 0;
+        let left = 0;
+        let right = 0;
+        
+        let curPos = x;
+        // calculate right moves
+        while (curPos + 1 < this.board[y].length && this.board[y][curPos + 1] == 0) {
+            curPos++;
+            right++;
+        }
+        // calculate left moves
+        curPos = x;
+        while (curPos > 0 && this.board[y][curPos - 1] == 0) {
+            curPos--;
+            left++;
+        }
+        // calculate bottom moves
+        curPos = y;
+        while (curPos + 1 < this.board.length && this.board[curPos + 1][x] == 0) {
+            curPos++;
+            bottom++;
+        }
+        // calculate top moves
+        curPos = y;
+        while (curPos > 0 && this.board[curPos - 1][x] == 0) {
+            curPos--;
+            top++;
+        }
+        
         return {
-            top: 10,
-            bottom: 100,
-            left: 0,
-            right: 100,
+            top: top * this.blockSize,
+            bottom: bottom * this.blockSize,
+            left: left * this.blockSize,
+            right: right * this.blockSize,
         }
     }
 
@@ -47,7 +77,10 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         this.input.on('dragstart', (pointer, obj) => {
-            console.log('start from ', this.getMapPosition(obj.x, obj.y));
+            let mapPos = this.getMapPosition(obj.x, obj.y);
+            let allowed = this.getAllowedMoves(mapPos.x, mapPos.y);
+            console.log('allowed moves ', allowed);
+            
             this.isVerticalMove = undefined;
             this.draggedFrom = {x: obj.x, y: obj.y};
         });
@@ -57,6 +90,7 @@ export default class BlocksScene extends Phaser.Scene {
             let allowed = this.getAllowedMoves(mapPos.x, mapPos.y);
             let dX = dragX - obj.x;
             let dY = dragY - obj.y;
+            console.log(allowed);
             
             if (this.isVerticalMove === undefined) {
                 this.isVerticalMove = Math.abs(obj.y - dragY) > Math.abs(obj.x - dragX);
@@ -65,12 +99,10 @@ export default class BlocksScene extends Phaser.Scene {
             if (this.isVerticalMove) {
                 if (dY > 0 && this.draggedFrom.y + allowed.bottom < dragY) { 
                     obj.setPosition(obj.x, this.draggedFrom.y + allowed.bottom);
-                    console.log('hit bottom')
                     return true;
                 }
                 if (dY < 0 &&  this.draggedFrom.y - allowed.top > dragY) {
                     obj.setPosition(obj.x, this.draggedFrom.y - allowed.top);
-                    console.log('hit top')
                     return true;
                 }
                 obj.setPosition(obj.x, dragY);
@@ -78,12 +110,10 @@ export default class BlocksScene extends Phaser.Scene {
             else {
                 if (dX > 0 && allowed.right + this.draggedFrom.x < dragX) {
                     obj.setPosition(this.draggedFrom.x + allowed.right, obj.y);
-                    console.log('hit right')
                     return true;
                 }
                 if (dX < 0 && this.draggedFrom.x - allowed.left > dragX) {
                     obj.setPosition(this.draggedFrom.x - allowed.left, obj.y);
-                    console.log('hit left')
                     return true;
                 }
                 obj.setPosition(dragX, obj.y);
@@ -94,7 +124,6 @@ export default class BlocksScene extends Phaser.Scene {
 
         this.input.on('dragend', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
-            console.log('dropped on ', mapPos.x, mapPos.y);
             obj.setPosition(mapPos.x * this.blockSize + 50, mapPos.y * this.blockSize + 50);
         });
 
