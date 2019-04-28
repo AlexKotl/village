@@ -57,6 +57,7 @@ export default class BlocksScene extends Phaser.Scene {
         this.input.on('drag', (pointer, obj, dragX, dragY) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
             let newMapPos = this.getMapPosition(dragX, dragY);
+            console.log('map pos',mapPos, 'new',newMapPos)
             
             // decide which axis we move block
             if (this.isVerticalMove === undefined) {
@@ -68,13 +69,22 @@ export default class BlocksScene extends Phaser.Scene {
                     obj.setPosition(obj.x, mapPos.y * this.blockSize);
                     return true;
                 }
+                // bottom bouce
+                if (!this.isAllowed(mapPos.x, newMapPos.y + 1)) {
+                    obj.setPosition(obj.x, newMapPos.y * this.blockSize);
+                    return true;
+                }
                 
                 obj.setPosition(obj.x, dragY);
             }
             else {
-                console.log(newMapPos, dragX, dragY);
                 if (!this.isAllowed(newMapPos.x, mapPos.y)) {
                     obj.setPosition(mapPos.x * this.blockSize, obj.y);
+                    return true;
+                }
+                // right bouce
+                if (!this.isAllowed(newMapPos.x + 1, mapPos.y)) {
+                    obj.setPosition(newMapPos.x * this.blockSize, obj.y);
                     return true;
                 }
                 
