@@ -55,6 +55,10 @@ export default class BlocksScene extends Phaser.Scene {
 
         // dragX - new pos of element
         this.input.on('drag', (pointer, obj, dragX, dragY) => {
+            if (Math.abs(dragX - obj.x) < 5 && Math.abs(dragY - obj.y) < 5) {
+                return true;
+            }
+            
             let mapPos = this.getMapPosition(obj.x, obj.y);
             let newMapPos = this.getMapPosition(dragX, dragY);
             
