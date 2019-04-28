@@ -4,10 +4,60 @@ export default class BlocksScene extends Phaser.Scene {
     
     constructor() {
         super({ key: 'BlocksScene'})
+        
+        this.blockSize = 64;
+        this.boardSize = 10;
+        
+        this.figuresPosition = [
+            {
+                name: 'line',
+                pos: {x: 0, y: 0},
+            },
+            {
+                name: 'square',
+                pos: {x: 2, y: 2},
+            },
+            {
+                name: 'gun',
+                pos: {x: 0, y: 3},
+            }
+        ];
+        
+        this.board = this.generateBoard(this.figuresPosition);
+        
+        this.figures = {
+            line: {
+                shape: [[1,1,1,1]],
+            },
+            square: {
+                shape: [[1,1], [1,1]],
+            },
+            gun: {
+                shape: [[1,0,0], [1,1,1]],
+            }
+        };
     }
 
     preload() {
         this.load.image('block', 'assets/sprites/block.png');
+        this.load.image('line', 'assets/sprites/line.png');
+        this.load.image('gun', 'assets/sprites/l.png');
+        this.load.image('square', 'assets/sprites/square.png');
+    }
+    
+    generateBoard(figuresPosition) {
+        // init empty board
+        let board = [];
+        for (let i=0; i<this.boardSize; i++) {
+            board[i] = [];
+            for (let j=0; j<this.boardSize; j++) {
+                board[i][j] = 0;
+            }
+        }
+        
+        // fill with figures
+        
+        return board;
     }
     
     getMapPosition(x, y) {
@@ -25,15 +75,6 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     create() {
-        this.blockSize = 64;
-        
-        this.board = [
-            [1,1,1,0,0],
-            [0,0,0,0,1],
-            [0,0,0,0,0],
-            [1,1,0,0,1],
-            [1,1,0,0,1]
-        ];
         
         for (let y=0; y<this.board.length; y++) {
             for (let x=0; x<this.board[y].length; x++) {
