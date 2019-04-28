@@ -54,6 +54,8 @@ export default class BlocksScene extends Phaser.Scene {
             }
         }
         
+        this.graphics.clear(); // clear debug graphics
+        
         // fill with figures
         for (let figure of this.figures) {
             let shape = this.figureTypes[figure.name].shape;
@@ -103,7 +105,10 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         this.input.on('dragstart', (pointer, obj) => {
-            let fig = this.figures.find(el => obj === el.sprite);
+            // rebuild collision map - remove figure
+            this.draggedFigureIndex = this.figures.findIndex(el => obj === el.sprite);
+            this.figures[this.draggedFigureIndex].pos.x = 100;
+            this.board = this.generateBoard();
             
             let mapPos = this.getMapPosition(obj.x, obj.y);
             this.board[mapPos.y][mapPos.x] = 0;
@@ -157,12 +162,13 @@ export default class BlocksScene extends Phaser.Scene {
         this.input.on('dragend', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x + this.blockSize/2, obj.y + this.blockSize/2); // get avarage pos
             obj.setPosition(mapPos.x * this.blockSize, mapPos.y * this.blockSize);
-            this.board[mapPos.y][mapPos.x] = 1;
+            
+            // update collision map
+            this.figures[this.draggedFigureIndex].pos.x = mapPos.x;
+            this.figures[this.draggedFigureIndex].pos.y = mapPos.y;
+            this.board = this.generateBoard();
         });
 
     }
-    
-    update(time, delta) {
-        
-    }
+
 }
