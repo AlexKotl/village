@@ -5,7 +5,7 @@ export default class BlocksScene extends Phaser.Scene {
     constructor() {
         super({ key: 'BlocksScene'})
         
-        this.blockSize = 64;
+        this.blockSize = 54;
         this.boardSize = 10;
         
         // properties of figures
@@ -35,10 +35,6 @@ export default class BlocksScene extends Phaser.Scene {
                 pos: {x: 5, y: 6},
             }
         ];
-        
-        this.board = this.generateBoard(this.figuresPosition);
-        
-        
     }
 
     preload() {
@@ -66,6 +62,12 @@ export default class BlocksScene extends Phaser.Scene {
                     board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
                 }
             }
+            
+            // add sprite
+            let sprite = this.add.sprite(figure.pos.y * this.blockSize, figure.pos.x * this.blockSize, figure.name);
+            sprite.setOrigin(0);
+            sprite.alpha = 0.8;
+            this.input.setDraggable(sprite.setInteractive());
         }
         
         return board;
@@ -87,15 +89,17 @@ export default class BlocksScene extends Phaser.Scene {
 
     create() {
         
-        for (let y=0; y<this.board.length; y++) {
-            for (let x=0; x<this.board[y].length; x++) {
-                if (this.board[x][y] > 0) {
-                    let block = this.add.sprite(y * this.blockSize, x * this.blockSize, 'block');
-                    block.setOrigin(0);
-                    this.input.setDraggable(block.setInteractive());
-                }
-            }
-        }
+        this.board = this.generateBoard(this.figuresPosition);
+        
+        // for (let y=0; y<this.board.length; y++) {
+        //     for (let x=0; x<this.board[y].length; x++) {
+        //         if (this.board[x][y] > 0) {
+        //             let block = this.add.sprite(y * this.blockSize, x * this.blockSize, 'block');
+        //             block.setOrigin(0);
+        //             this.input.setDraggable(block.setInteractive());
+        //         }
+        //     }
+        // }
         
         this.input.on('dragstart', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
