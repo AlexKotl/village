@@ -82,11 +82,24 @@ export default class BlocksScene extends Phaser.Scene {
         }
     }
     
-    isAllowed(x,y) {
+    isAllowed(x, y) {
         if (x > this.boardSize || y > this.boardSize || x < 0 || y < 0) {
             return false;
         }
         return this.board[y][x] === 0;
+    }
+    
+    isFigureAllowed(figure, x, y) {
+        let shape = this.figureTypes[figure.name].shape;
+        for (let fy=0; fy<shape.length; fy++) {
+            for (let fx=0; fx<shape[fy].length; fx++) {
+                if (shape[fy][fx] === 1 && !this.isAllowed(x + fx, y + fy)) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     create() {
@@ -132,28 +145,36 @@ export default class BlocksScene extends Phaser.Scene {
             }
             
             if (this.isVerticalMove) {
-                if (!this.isAllowed(mapPos.x, newMapPos.y)) {
+                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y)) {
                     obj.setPosition(obj.x, mapPos.y * this.blockSize);
                     return true;
                 }
+                // if (!this.isAllowed(mapPos.x, newMapPos.y)) {
+                //     obj.setPosition(obj.x, mapPos.y * this.blockSize);
+                //     return true;
+                // }
                 // bottom bouce
-                if (!this.isAllowed(mapPos.x, newMapPos.y + 1)) {
-                    obj.setPosition(obj.x, newMapPos.y * this.blockSize);
-                    return true;
-                }
+                // if (!this.isAllowed(mapPos.x, newMapPos.y + 1)) {
+                //     obj.setPosition(obj.x, newMapPos.y * this.blockSize);
+                //     return true;
+                // }
                 
                 obj.setPosition(obj.x, dragY);
             }
             else {
-                if (!this.isAllowed(newMapPos.x, mapPos.y)) {
+                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], newMapPos.x, mapPos.y)) {
                     obj.setPosition(mapPos.x * this.blockSize, obj.y);
                     return true;
                 }
-                // right bouce
-                if (!this.isAllowed(newMapPos.x + 1, mapPos.y)) {
-                    obj.setPosition(newMapPos.x * this.blockSize, obj.y);
-                    return true;
-                }
+                // if (!this.isAllowed(newMapPos.x, mapPos.y)) {
+                //     obj.setPosition(mapPos.x * this.blockSize, obj.y);
+                //     return true;
+                // }
+                // // right bouce
+                // if (!this.isAllowed(newMapPos.x + 1, mapPos.y)) {
+                //     obj.setPosition(newMapPos.x * this.blockSize, obj.y);
+                //     return true;
+                // }
                 
                 obj.setPosition(dragX, obj.y);
             }
