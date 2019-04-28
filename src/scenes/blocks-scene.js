@@ -58,6 +58,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('room', 'assets/sprites/room.png');
         this.load.image('cat1', 'assets/sprites/cats/cat1.png');
         this.load.image('cat2', 'assets/sprites/cats/cat2.png');
         this.load.image('cat3', 'assets/sprites/cats/cat3.png');
@@ -124,6 +125,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     create() {
+        this.add.sprite(0, 0, 'room').setOrigin(0);
         this.graphics = this.add.graphics(); 
         this.board = this.generateBoard();
         
