@@ -17,43 +17,11 @@ export default class BlocksScene extends Phaser.Scene {
         }
     }
     
-    getAllowedMoves(x, y) {
-        let bottom = 0;
-        let top = 0;
-        let left = 0;
-        let right = 0;
-        
-        let curPos = x;
-        // calculate right moves
-        while (curPos + 1 < this.board[y].length && this.board[y][curPos + 1] == 0) {
-            curPos++;
-            right++;
+    isAllowed(x,y) {
+        if (x > 4 || y > 4 || x < 0 || y < 0) {
+            return false;
         }
-        // calculate left moves
-        curPos = x;
-        while (curPos > 0 && this.board[y][curPos - 1] == 0) {
-            curPos--;
-            left++;
-        }
-        // calculate bottom moves
-        curPos = y;
-        while (curPos + 1 < this.board.length && this.board[curPos + 1][x] == 0) {
-            curPos++;
-            bottom++;
-        }
-        // calculate top moves
-        curPos = y;
-        while (curPos > 0 && this.board[curPos - 1][x] == 0) {
-            curPos--;
-            top++;
-        }
-        
-        return {
-            top: top,
-            bottom: bottom,
-            left: left,
-            right: right,
-        }
+        return this.board[y][x] === 0;
     }
 
     create() {
@@ -79,53 +47,45 @@ export default class BlocksScene extends Phaser.Scene {
         
         this.input.on('dragstart', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
-            let allowed = this.getAllowedMoves(mapPos.x, mapPos.y);
-            console.log('allowed moves ', allowed);
+            this.board[mapPos.y][mapPos.x] = 0;
             
             this.isVerticalMove = undefined;
             this.draggedFrom = {x: obj.x, y: obj.y};
         });
 
+        // dragX - new pos of element
         this.input.on('drag', (pointer, obj, dragX, dragY) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
-            let allowed = this.getAllowedMoves(mapPos.x, mapPos.y);
-            let dX = dragX - obj.x;
-            let dY = dragY - obj.y;
-            console.log(allowed);
+            let newMapPos = this.getMapPosition(dragX, dragY);
             
+            // decide which axis we move block
             if (this.isVerticalMove === undefined) {
                 this.isVerticalMove = Math.abs(obj.y - dragY) > Math.abs(obj.x - dragX);
             }
             
             if (this.isVerticalMove) {
-                if (dY > 0 && this.draggedFrom.y + allowed.bottom < dragY) { 
-                    obj.setPosition(obj.x, this.draggedFrom.y + allowed.bottom);
+                if (!this.isAllowed(mapPos.x, newMapPos.y)) {
+                    obj.setPosition(obj.x, mapPos.y * this.blockSize);
                     return true;
                 }
-                if (dY < 0 &&  this.draggedFrom.y - allowed.top > dragY) {
-                    obj.setPosition(obj.x, this.draggedFrom.y - allowed.top);
-                    return true;
-                }
+                
                 obj.setPosition(obj.x, dragY);
             }
             else {
-                if (dX > 0 && allowed.right + this.draggedFrom.x < dragX) {
-                    obj.setPosition(this.draggedFrom.x + allowed.right, obj.y);
+                console.log(newMapPos, dragX, dragY);
+                if (!this.isAllowed(newMapPos.x, mapPos.y)) {
+                    obj.setPosition(mapPos.x * this.blockSize, obj.y);
                     return true;
                 }
-                if (dX < 0 && this.draggedFrom.x - allowed.left > dragX) {
-                    obj.setPosition(this.draggedFrom.x - allowed.left, obj.y);
-                    return true;
-                }
+                
                 obj.setPosition(dragX, obj.y);
             }
-            
-            
         });
 
         this.input.on('dragend', (pointer, obj) => {
             let mapPos = this.getMapPosition(obj.x, obj.y);
             obj.setPosition(mapPos.x * this.blockSize, mapPos.y * this.blockSize);
+            this.board[mapPos.y][mapPos.x] = 1;
         });
 
     }
