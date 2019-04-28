@@ -9,7 +9,7 @@ export default class BlocksScene extends Phaser.Scene {
         this.boardSize = 10;
         
         // properties of figures
-        this.figures = {
+        this.figureTypes = {
             line: {
                 shape: [[1,1,1,1]],
             },
@@ -21,7 +21,7 @@ export default class BlocksScene extends Phaser.Scene {
             }
         };
         
-        this.figuresPosition = [
+        this.figures = [
             {
                 name: 'line',
                 pos: {x: 0, y: 0},
@@ -44,7 +44,7 @@ export default class BlocksScene extends Phaser.Scene {
         this.load.image('square', 'assets/sprites/square.png');
     }
     
-    generateBoard(figuresPosition) {
+    generateBoard() {
         // init empty board
         let board = [];
         for (let i=0; i<this.boardSize; i++) {
@@ -55,19 +55,19 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         // fill with figures
-        for (let figure of this.figuresPosition) {
-            let shape = this.figures[figure.name].shape;
+        for (let figure of this.figures) {
+            let shape = this.figureTypes[figure.name].shape;
             for (let y=0; y<shape.length; y++) {
                 for (let x=0; x<shape[y].length; x++) {
                     board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
+                    // debug squares
+                    if (shape[y][x] === 1) {
+                        this.graphics.fillStyle(0x00ff00, 1);
+                        this.graphics.fillRect((x + figure.pos.x) * this.blockSize, (y + figure.pos.y) * this.blockSize, this.blockSize, this.blockSize);
+                    }
+                    
                 }
             }
-            
-            // add sprite
-            let sprite = this.add.sprite(figure.pos.y * this.blockSize, figure.pos.x * this.blockSize, figure.name);
-            sprite.setOrigin(0);
-            sprite.alpha = 0.8;
-            this.input.setDraggable(sprite.setInteractive());
         }
         
         return board;
@@ -88,20 +88,23 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     create() {
+        this.graphics = this.add.graphics(); 
+        this.board = this.generateBoard();
         
-        this.board = this.generateBoard(this.figuresPosition);
-        
-        // for (let y=0; y<this.board.length; y++) {
-        //     for (let x=0; x<this.board[y].length; x++) {
-        //         if (this.board[x][y] > 0) {
-        //             let block = this.add.sprite(y * this.blockSize, x * this.blockSize, 'block');
-        //             block.setOrigin(0);
-        //             this.input.setDraggable(block.setInteractive());
-        //         }
-        //     }
-        // }
+        // add sprites
+        for (let n in this.figures) {
+            let figure = this.figures[n];
+            let sprite = this.add.sprite(figure.pos.x * this.blockSize, figure.pos.y * this.blockSize, figure.name);
+            sprite.setOrigin(0);
+            sprite.alpha = 0.8;
+            this.input.setDraggable(sprite.setInteractive());
+            
+            this.figures[n].sprite = sprite;
+        }
         
         this.input.on('dragstart', (pointer, obj) => {
+            let fig = this.figures.find(el => obj === el.sprite);
+            
             let mapPos = this.getMapPosition(obj.x, obj.y);
             this.board[mapPos.y][mapPos.x] = 0;
             
