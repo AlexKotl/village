@@ -8,23 +8,7 @@ export default class BlocksScene extends Phaser.Scene {
         this.blockSize = 64;
         this.boardSize = 10;
         
-        this.figuresPosition = [
-            {
-                name: 'line',
-                pos: {x: 0, y: 0},
-            },
-            {
-                name: 'square',
-                pos: {x: 2, y: 2},
-            },
-            {
-                name: 'gun',
-                pos: {x: 0, y: 3},
-            }
-        ];
-        
-        this.board = this.generateBoard(this.figuresPosition);
-        
+        // properties of figures
         this.figures = {
             line: {
                 shape: [[1,1,1,1]],
@@ -36,6 +20,25 @@ export default class BlocksScene extends Phaser.Scene {
                 shape: [[1,0,0], [1,1,1]],
             }
         };
+        
+        this.figuresPosition = [
+            {
+                name: 'line',
+                pos: {x: 0, y: 0},
+            },
+            {
+                name: 'square',
+                pos: {x: 1, y: 3},
+            },
+            {
+                name: 'gun',
+                pos: {x: 5, y: 6},
+            }
+        ];
+        
+        this.board = this.generateBoard(this.figuresPosition);
+        
+        
     }
 
     preload() {
@@ -56,6 +59,14 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         // fill with figures
+        for (let figure of this.figuresPosition) {
+            let shape = this.figures[figure.name].shape;
+            for (let y=0; y<shape.length; y++) {
+                for (let x=0; x<shape[y].length; x++) {
+                    board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
+                }
+            }
+        }
         
         return board;
     }
@@ -68,7 +79,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     isAllowed(x,y) {
-        if (x > 4 || y > 4 || x < 0 || y < 0) {
+        if (x > this.boardSize || y > this.boardSize || x < 0 || y < 0) {
             return false;
         }
         return this.board[y][x] === 0;
