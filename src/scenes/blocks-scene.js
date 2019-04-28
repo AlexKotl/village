@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+const DEBUG_MODE = false;
+
 export default class BlocksScene extends Phaser.Scene {
     
     constructor() {
@@ -10,38 +12,57 @@ export default class BlocksScene extends Phaser.Scene {
         
         // properties of figures
         this.figureTypes = {
-            line: {
-                shape: [[1,1,1,1]],
+            cat1: {
+                shape: [[1],[1],[1]],
             },
-            square: {
+            cat2: {
+                shape: [[1,1,1], [1,0,1]],
+            },
+            cat3: {
                 shape: [[1,1], [1,1]],
             },
-            gun: {
-                shape: [[1,0,0], [1,1,1]],
-            }
+            cat4: {
+                shape: [[1]],
+            },
+            cat5: {
+                shape: [[1,1]],
+            },
         };
         
         this.figures = [
             {
-                name: 'line',
+                name: 'cat1',
                 pos: {x: 0, y: 0},
             },
             {
-                name: 'square',
+                name: 'cat2',
                 pos: {x: 1, y: 3},
             },
             {
-                name: 'gun',
+                name: 'cat3',
                 pos: {x: 5, y: 6},
-            }
+            },
+            {
+                name: 'cat4',
+                pos: {x: 6, y: 1},
+            },
+            {
+                name: 'cat5',
+                pos: {x: 5, y: 3},
+            },
+            {
+                name: 'cat4',
+                pos: {x: 2, y: 8},
+            },
         ];
     }
 
     preload() {
-        this.load.image('block', 'assets/sprites/block.png');
-        this.load.image('line', 'assets/sprites/line.png');
-        this.load.image('gun', 'assets/sprites/l.png');
-        this.load.image('square', 'assets/sprites/square.png');
+        this.load.image('cat1', 'assets/sprites/cats/cat1.png');
+        this.load.image('cat2', 'assets/sprites/cats/cat2.png');
+        this.load.image('cat3', 'assets/sprites/cats/cat3.png');
+        this.load.image('cat4', 'assets/sprites/cats/cat4.png');
+        this.load.image('cat5', 'assets/sprites/cats/cat5.png');
     }
     
     generateBoard() {
@@ -63,7 +84,7 @@ export default class BlocksScene extends Phaser.Scene {
                 for (let x=0; x<shape[y].length; x++) {
                     board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
                     // debug squares
-                    if (shape[y][x] === 1) {
+                    if (DEBUG_MODE && shape[y][x] === 1) {
                         this.graphics.fillStyle(0x00ff00, 1);
                         this.graphics.fillRect((x + figure.pos.x) * this.blockSize, (y + figure.pos.y) * this.blockSize, this.blockSize, this.blockSize);
                     }
@@ -111,7 +132,7 @@ export default class BlocksScene extends Phaser.Scene {
             let figure = this.figures[n];
             let sprite = this.add.sprite(figure.pos.x * this.blockSize, figure.pos.y * this.blockSize, figure.name);
             sprite.setOrigin(0);
-            sprite.alpha = 0.8;
+            sprite.alpha = DEBUG_MODE ? 0.8 : 1;
             this.input.setDraggable(sprite.setInteractive());
             
             this.figures[n].sprite = sprite;
