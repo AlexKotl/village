@@ -8,7 +8,7 @@ export default class BlocksScene extends Phaser.Scene {
         super({ key: 'BlocksScene'})
         
         this.blockSize = 54;
-        this.boardSize = 10;
+        this.boardSize = {width: 10, height: 7};
         
         // properties of figures
         this.figureTypes = {
@@ -40,7 +40,7 @@ export default class BlocksScene extends Phaser.Scene {
             },
             {
                 name: 'cat3',
-                pos: {x: 5, y: 6},
+                pos: {x: 5, y: 4},
             },
             {
                 name: 'cat4',
@@ -52,7 +52,7 @@ export default class BlocksScene extends Phaser.Scene {
             },
             {
                 name: 'cat4',
-                pos: {x: 2, y: 8},
+                pos: {x: 2, y: 5},
             },
         ];
     }
@@ -69,9 +69,9 @@ export default class BlocksScene extends Phaser.Scene {
     generateBoard() {
         // init empty board
         let board = [];
-        for (let i=0; i<this.boardSize; i++) {
+        for (let i=0; i<this.boardSize.height; i++) {
             board[i] = [];
-            for (let j=0; j<this.boardSize; j++) {
+            for (let j=0; j<this.boardSize.width; j++) {
                 board[i][j] = 0;
             }
         }
@@ -105,7 +105,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     isAllowed(x, y) {
-        if (x > this.boardSize || y > this.boardSize || x < 0 || y < 0) {
+        if (x > this.boardSize.width || y > this.boardSize.height || x < 0 || y < 0) {
             return false;
         }
         return this.board[y][x] === 0;
@@ -125,7 +125,11 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.sprite(0, 0, 'room').setOrigin(0);
+        // setup camera and background
+        this.cameras.main.scrollX = -140;
+        this.cameras.main.scrollY = -100;
+        this.add.sprite(-140, -100, 'room').setOrigin(0);
+        
         this.graphics = this.add.graphics(); 
         this.board = this.generateBoard();
         
