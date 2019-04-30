@@ -109,7 +109,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     isAllowed(x, y) {
-        if (x > this.boardSize.width || y > this.boardSize.height || x < 0 || y < 0) {
+        if (x >= this.boardSize.width || y >= this.boardSize.height || x < 0 || y < 0) {
             return false;
         }
         return this.board[y][x] === 0;
