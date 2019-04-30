@@ -170,6 +170,13 @@ export default class BlocksScene extends Phaser.Scene {
             let mapPos = this.getMapPosition(obj.x, obj.y);
             let newMapPos = this.getMapPosition(dragX, dragY);
             
+            // make new map pos difference not bigger than 1 as we move cell by cell and cant jump over figures
+            for (let axis of ['x', 'y']) {
+                if (Math.abs(mapPos[axis] - newMapPos[axis]) > 1) {
+                    newMapPos[axis] = mapPos[axis] + Math.sign(newMapPos[axis] - mapPos[axis]);
+                }
+            }
+            
             this.drawDebugSquare(mapPos.x, mapPos.y, 0xff0000);
             
             // decide which axis we move block
