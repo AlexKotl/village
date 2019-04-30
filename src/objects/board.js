@@ -9,7 +9,6 @@ export default class Board {
         this.size = settings.size;
         this.blockSize = settings.blockSize;
         this.scene = settings.scene;
-        //this.boardFigures = settings.boardFigures;
         this.figureTypes = figures;
         this.generateBoard();
     }

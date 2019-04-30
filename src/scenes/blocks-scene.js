@@ -42,14 +42,11 @@ export default class BlocksScene extends Phaser.Scene {
                 width: 10, 
                 height: 7
             },
-            //boardFigures: map.figures,
             scene: this,
         });
         
-        //this.board.generateBoard();
         
         // add sprites
-        
         for (let n in map.figures) {
             console.log('sss');
             let figure = map.figures[n];
