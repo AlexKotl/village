@@ -97,7 +97,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     drawDebugSquare(x, y, color=0x00ff00) {
-        this.graphics.fillStyle(color, 0.5);
+        this.graphics.fillStyle(color, 0.3);
         this.graphics.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
     }
     
@@ -182,15 +182,11 @@ export default class BlocksScene extends Phaser.Scene {
                     obj.setPosition(obj.x, mapPos.y * this.blockSize);
                     return true;
                 }
-                // if (!this.isAllowed(mapPos.x, newMapPos.y)) {
-                //     obj.setPosition(obj.x, mapPos.y * this.blockSize);
-                //     return true;
-                // }
                 // bottom bouce
-                // if (!this.isAllowed(mapPos.x, newMapPos.y + 1)) {
-                //     obj.setPosition(obj.x, newMapPos.y * this.blockSize);
-                //     return true;
-                // }
+                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y + 1)) {
+                    obj.setPosition(obj.x, newMapPos.y * this.blockSize);
+                    return true;
+                }
                 
                 obj.setPosition(obj.x, dragY);
             }
@@ -199,15 +195,11 @@ export default class BlocksScene extends Phaser.Scene {
                     obj.setPosition(mapPos.x * this.blockSize, obj.y);
                     return true;
                 }
-                // if (!this.isAllowed(newMapPos.x, mapPos.y)) {
-                //     obj.setPosition(mapPos.x * this.blockSize, obj.y);
-                //     return true;
-                // }
-                // // right bouce
-                // if (!this.isAllowed(newMapPos.x + 1, mapPos.y)) {
-                //     obj.setPosition(newMapPos.x * this.blockSize, obj.y);
-                //     return true;
-                // }
+                // right bouce
+                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], newMapPos.x + 1, mapPos.y)) {
+                    obj.setPosition(newMapPos.x * this.blockSize, obj.y);
+                    return true;
+                }
                 
                 obj.setPosition(dragX, obj.y);
             }
