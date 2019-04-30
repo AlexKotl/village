@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import Board from '../objects/board';
+import map from '../objects/map';
 
 const DEBUG_MODE = true;
 
@@ -6,55 +8,6 @@ export default class BlocksScene extends Phaser.Scene {
     
     constructor() {
         super({ key: 'BlocksScene'})
-        
-        this.blockSize = 54;
-        this.boardSize = {width: 10, height: 7};
-        
-        // properties of figures
-        this.figureTypes = {
-            cat1: {
-                shape: [[1],[1],[1]],
-            },
-            cat2: {
-                shape: [[1,1,1], [1,0,1]],
-            },
-            cat3: {
-                shape: [[1,1], [1,1]],
-            },
-            cat4: {
-                shape: [[1]],
-            },
-            cat5: {
-                shape: [[1,1]],
-            },
-        };
-        
-        this.figures = [
-            {
-                name: 'cat1',
-                pos: {x: 0, y: 0},
-            },
-            {
-                name: 'cat2',
-                pos: {x: 1, y: 3},
-            },
-            {
-                name: 'cat3',
-                pos: {x: 5, y: 4},
-            },
-            {
-                name: 'cat4',
-                pos: {x: 6, y: 1},
-            },
-            {
-                name: 'cat5',
-                pos: {x: 5, y: 3},
-            },
-            {
-                name: 'cat4',
-                pos: {x: 2, y: 5},
-            },
-        ];
     }
 
     preload() {
@@ -66,67 +19,14 @@ export default class BlocksScene extends Phaser.Scene {
         this.load.image('cat5', 'assets/sprites/cats/cat5.png');
     }
     
-    generateBoard() {
-        // init empty board
-        let board = [];
-        for (let i=0; i<this.boardSize.height; i++) {
-            board[i] = [];
-            for (let j=0; j<this.boardSize.width; j++) {
-                board[i][j] = 0;
-            }
-        }
-        
-        this.graphics.clear(); // clear debug graphics
-        
-        // fill with figures
-        for (let figure of this.figures) {
-            let shape = this.figureTypes[figure.name].shape;
-            for (let y=0; y<shape.length; y++) {
-                for (let x=0; x<shape[y].length; x++) {
-                    board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
-                    // debug squares
-                    if (DEBUG_MODE && shape[y][x] === 1) {
-                        this.drawDebugSquare(x + figure.pos.x, y + figure.pos.y);
-                    }
-                    
-                }
-            }
-        }
-        
-        return board;
-    }
-    
-    drawDebugSquare(x, y, color=0x00ff00) {
-        this.graphics.fillStyle(color, 0.3);
-        this.graphics.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
-    }
-    
     getMapPosition(x, y) {
         return {
-            x: Math.round(x / this.blockSize + 0.5) - 1,
-            y: Math.round(y / this.blockSize + 0.5) - 1,
+            x: Math.round(x / this.board.blockSize + 0.5) - 1,
+            y: Math.round(y / this.board.blockSize + 0.5) - 1,
         }
     }
     
-    isAllowed(x, y) {
-        if (x >= this.boardSize.width || y >= this.boardSize.height || x < 0 || y < 0) {
-            return false;
-        }
-        return this.board[y][x] === 0;
-    }
     
-    isFigureAllowed(figure, x, y) {
-        let shape = this.figureTypes[figure.name].shape;
-        for (let fy=0; fy<shape.length; fy++) {
-            for (let fx=0; fx<shape[fy].length; fx++) {
-                if (shape[fy][fx] === 1 && !this.isAllowed(x + fx, y + fy)) {
-                    return false;
-                }
-            }
-        }
-        
-        return true;
-    }
 
     create() {
         // setup camera and background
@@ -135,27 +35,41 @@ export default class BlocksScene extends Phaser.Scene {
         this.add.sprite(-140, -100, 'room').setOrigin(0);
         
         this.graphics = this.add.graphics(); 
-        this.board = this.generateBoard();
+        
+        this.board = new Board({
+            blockSize: 54,
+            size: {
+                width: 10, 
+                height: 7
+            },
+            //boardFigures: map.figures,
+            scene: this,
+        });
+        
+        //this.board.generateBoard();
         
         // add sprites
-        for (let n in this.figures) {
-            let figure = this.figures[n];
-            let sprite = this.add.sprite(figure.pos.x * this.blockSize, figure.pos.y * this.blockSize, figure.name);
+        
+        for (let n in map.figures) {
+            console.log('sss');
+            let figure = map.figures[n];
+            
+            let sprite = this.add.sprite(figure.pos.x * this.board.blockSize, figure.pos.y * this.board.blockSize, figure.name);
             sprite.setOrigin(0);
             sprite.alpha = DEBUG_MODE ? 0.8 : 1;
             this.input.setDraggable(sprite.setInteractive());
             
-            this.figures[n].sprite = sprite;
+            map.figures[n].sprite = sprite;
         }
         
         this.input.on('dragstart', (pointer, obj) => {
             // rebuild collision map - remove figure
-            this.draggedFigureIndex = this.figures.findIndex(el => obj === el.sprite);
-            this.figures[this.draggedFigureIndex].pos.x = 100;
-            this.board = this.generateBoard();
+            this.draggedFigureIndex = map.figures.findIndex(el => obj === el.sprite);
+            map.figures[this.draggedFigureIndex].pos.x = 100;
+            this.board.generateBoard();
             
             let mapPos = this.getMapPosition(obj.x, obj.y);
-            this.board[mapPos.y][mapPos.x] = 0;
+            this.board.cells[mapPos.y][mapPos.x] = 0;
             
             this.isVerticalMove = undefined;
             this.draggedFrom = {x: obj.x, y: obj.y};
@@ -183,26 +97,26 @@ export default class BlocksScene extends Phaser.Scene {
             }
             
             if (this.isVerticalMove) {
-                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y)) {
-                    obj.setPosition(obj.x, mapPos.y * this.blockSize);
+                if (!this.board.isFigureAllowed(map.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y)) {
+                    obj.setPosition(obj.x, mapPos.y * this.board.blockSize);
                     return true;
                 }
                 // bottom bouce
-                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y + 1)) {
-                    obj.setPosition(obj.x, newMapPos.y * this.blockSize);
+                if (!this.board.isFigureAllowed(map.figures[this.draggedFigureIndex], mapPos.x, newMapPos.y + 1)) {
+                    obj.setPosition(obj.x, newMapPos.y * this.board.blockSize);
                     return true;
                 }
                 
                 obj.setPosition(obj.x, dragY);
             }
             else {
-                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], newMapPos.x, mapPos.y)) {
-                    obj.setPosition(mapPos.x * this.blockSize, obj.y);
+                if (!this.board.isFigureAllowed(map.figures[this.draggedFigureIndex], newMapPos.x, mapPos.y)) {
+                    obj.setPosition(mapPos.x * this.board.blockSize, obj.y);
                     return true;
                 }
                 // right bouce
-                if (!this.isFigureAllowed(this.figures[this.draggedFigureIndex], newMapPos.x + 1, mapPos.y)) {
-                    obj.setPosition(newMapPos.x * this.blockSize, obj.y);
+                if (!this.board.isFigureAllowed(map.figures[this.draggedFigureIndex], newMapPos.x + 1, mapPos.y)) {
+                    obj.setPosition(newMapPos.x * this.board.blockSize, obj.y);
                     return true;
                 }
                 
@@ -211,13 +125,13 @@ export default class BlocksScene extends Phaser.Scene {
         });
 
         this.input.on('dragend', (pointer, obj) => {
-            let mapPos = this.getMapPosition(obj.x + this.blockSize/2, obj.y + this.blockSize/2); // get avarage pos
-            obj.setPosition(mapPos.x * this.blockSize, mapPos.y * this.blockSize);
+            let mapPos = this.getMapPosition(obj.x + this.board.blockSize/2, obj.y + this.board.blockSize/2); // get avarage pos
+            obj.setPosition(mapPos.x * this.board.blockSize, mapPos.y * this.board.blockSize);
             
             // update collision map
-            this.figures[this.draggedFigureIndex].pos.x = mapPos.x;
-            this.figures[this.draggedFigureIndex].pos.y = mapPos.y;
-            this.board = this.generateBoard();
+            map.figures[this.draggedFigureIndex].pos.x = mapPos.x;
+            map.figures[this.draggedFigureIndex].pos.y = mapPos.y;
+            this.board.generateBoard();
         });
 
     }
