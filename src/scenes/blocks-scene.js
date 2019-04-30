@@ -97,7 +97,7 @@ export default class BlocksScene extends Phaser.Scene {
     }
     
     drawDebugSquare(x, y, color=0x00ff00) {
-        this.graphics.fillStyle(0x00ff00, 0.5);
+        this.graphics.fillStyle(color, 0.5);
         this.graphics.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
     }
     
@@ -169,6 +169,8 @@ export default class BlocksScene extends Phaser.Scene {
             
             let mapPos = this.getMapPosition(obj.x, obj.y);
             let newMapPos = this.getMapPosition(dragX, dragY);
+            
+            this.drawDebugSquare(mapPos.x, mapPos.y, 0xff0000);
             
             // decide which axis we move block
             if (this.isVerticalMove === undefined) {
