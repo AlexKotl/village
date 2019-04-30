@@ -177,8 +177,6 @@ export default class BlocksScene extends Phaser.Scene {
                 }
             }
             
-            this.drawDebugSquare(mapPos.x, mapPos.y, 0xff0000);
-            
             // decide which axis we move block
             if (this.isVerticalMove === undefined) {
                 this.isVerticalMove = Math.abs(obj.y - dragY) > Math.abs(obj.x - dragX);
