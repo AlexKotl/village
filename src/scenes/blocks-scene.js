@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 export default class BlocksScene extends Phaser.Scene {
     
@@ -86,8 +86,7 @@ export default class BlocksScene extends Phaser.Scene {
                     board[y + figure.pos.y][x + figure.pos.x] = shape[y][x];
                     // debug squares
                     if (DEBUG_MODE && shape[y][x] === 1) {
-                        this.graphics.fillStyle(0x00ff00, 1);
-                        this.graphics.fillRect((x + figure.pos.x) * this.blockSize, (y + figure.pos.y) * this.blockSize, this.blockSize, this.blockSize);
+                        this.drawDebugSquare(x + figure.pos.x, y + figure.pos.y);
                     }
                     
                 }
@@ -95,6 +94,11 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         return board;
+    }
+    
+    drawDebugSquare(x, y, color=0x00ff00) {
+        this.graphics.fillStyle(0x00ff00, 0.5);
+        this.graphics.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
     }
     
     getMapPosition(x, y) {
