@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Board from '../objects/board';
+import Mouse from '../objects/mouse';
 import map from '../objects/map';
 
 const DEBUG_MODE = true;
@@ -11,12 +12,13 @@ export default class BlocksScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('room', 'assets/sprites/room.png');
+        this.load.image('room', 'assets/sprites/room2.jpg');
         this.load.image('cat1', 'assets/sprites/cats/cat1.png');
         this.load.image('cat2', 'assets/sprites/cats/cat2.png');
         this.load.image('cat3', 'assets/sprites/cats/cat3.png');
         this.load.image('cat4', 'assets/sprites/cats/cat4.png');
         this.load.image('cat5', 'assets/sprites/cats/cat5.png');
+        this.load.image('mouse', 'assets/sprites/mouse.png');
     }
     
     getMapPosition(x, y) {
@@ -25,30 +27,26 @@ export default class BlocksScene extends Phaser.Scene {
             y: Math.round(y / this.board.blockSize + 0.5) - 1,
         }
     }
-    
-    
 
     create() {
         // setup camera and background
-        this.cameras.main.scrollX = -140;
-        this.cameras.main.scrollY = -100;
-        this.add.sprite(-140, -100, 'room').setOrigin(0);
+        this.cameras.main.scrollX = -170;
+        this.cameras.main.scrollY = -40;
+        this.add.sprite(-170, -40, 'room').setOrigin(0);
         
         this.graphics = this.add.graphics(); 
         
         this.board = new Board({
             blockSize: 54,
             size: {
-                width: 10, 
+                width: 7, 
                 height: 7
             },
             scene: this,
         });
         
-        
         // add sprites
         for (let n in map.figures) {
-            console.log('sss');
             let figure = map.figures[n];
             
             let sprite = this.add.sprite(figure.pos.x * this.board.blockSize, figure.pos.y * this.board.blockSize, figure.name);
@@ -58,6 +56,10 @@ export default class BlocksScene extends Phaser.Scene {
             
             map.figures[n].sprite = sprite;
         }
+        
+        // add mouse
+        this.mouse = new Mouse();
+        this.add.sprite(-20, Math.round(this.board.size.height/2) * this.board.blockSize, 'mouse');
         
         this.input.on('dragstart', (pointer, obj) => {
             // rebuild collision map - remove figure
