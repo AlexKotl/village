@@ -58,7 +58,7 @@ export default class BlocksScene extends Phaser.Scene {
             scene: this,
             board: this.board,
             x: -30,
-            y: Math.round(this.board.size.height/2 - 1) * this.board.blockSize,
+            y: Math.round(this.board.size.height/2 - 1) * this.board.blockSize + this.board.blockSize/2,
             key: 'mouse',
         });
         

@@ -7,10 +7,10 @@ export default class Mouse extends Phaser.GameObjects.Sprite {
         this.board = config.board;
         this.isRunning = false;
         this.isReturning = false;
-        this.speed = 2;
+        this.speed = 3;
         
         this.setInteractive();
-        this.setOrigin(0);
+        //this.setOrigin(0);
         
         // launch mouse
         this.on('pointerdown', (pointer) => {
@@ -22,14 +22,25 @@ export default class Mouse extends Phaser.GameObjects.Sprite {
         if (this.isRunning) {
             const mousePos = this.board.getMapPosition(this.x, this.y);
             
+            // finish
             if (mousePos.x + 1 >= this.board.size.width) {
                 console.log('finish!');
                 this.isRunning = false;
             }
             
-            if (!this.board.isAllowed(mousePos.x + 1, mousePos.y) && mousePos.x >= 0) {
+            // return at home
+            if (mousePos.x < -1 && this.speed < 0) {
+                console.log('HOME!');
                 this.isRunning = false;
-                this.x = this.start.x;
+                this.speed /= -2;
+                this.scaleX *= -1;
+                
+            }
+            
+            // turn back
+            if (!this.board.isAllowed(mousePos.x + 1, mousePos.y) && mousePos.x >= 0) {
+                this.speed *= -2;
+                this.scaleX *= -1;
             }
             
             this.x += this.speed;
