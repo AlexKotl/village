@@ -38,7 +38,7 @@ export default class Mouse extends Phaser.GameObjects.Sprite {
             }
             
             // turn back
-            if (!this.board.isAllowed(mousePos.x + 1, mousePos.y) && mousePos.x >= 0) {
+            if (!this.board.isAllowed(mousePos.x , mousePos.y) && mousePos.x >= 0) {
                 this.speed *= -2;
                 this.scaleX *= -1;
             }
