@@ -42,6 +42,13 @@ export default class Board {
         this.cells = board;
     }
     
+    getMapPosition(x, y) {
+        return {
+            x: Math.round(x / this.blockSize + 0.5) - 1,
+            y: Math.round(y / this.blockSize + 0.5) - 1,
+        }
+    }
+    
     isAllowed(x, y) {
         if (x >= this.size.width || y >= this.size.height || x < 0 || y < 0) {
             return false;

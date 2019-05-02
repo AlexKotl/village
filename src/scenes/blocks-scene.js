@@ -23,13 +23,6 @@ export default class BlocksScene extends Phaser.Scene {
             frameHeight: 54,
         });
     }
-    
-    getMapPosition(x, y) {
-        return {
-            x: Math.round(x / this.board.blockSize + 0.5) - 1,
-            y: Math.round(y / this.board.blockSize + 0.5) - 1,
-        }
-    }
 
     create() {
         // setup camera and background
@@ -74,7 +67,7 @@ export default class BlocksScene extends Phaser.Scene {
             map.figures[this.draggedFigureIndex].pos.x = 100;
             this.board.generateBoard();
             
-            let mapPos = this.getMapPosition(obj.x, obj.y);
+            let mapPos = this.board.getMapPosition(obj.x, obj.y);
             this.board.cells[mapPos.y][mapPos.x] = 0;
             
             this.isVerticalMove = undefined;
@@ -87,8 +80,8 @@ export default class BlocksScene extends Phaser.Scene {
                 return true;
             }
             
-            let mapPos = this.getMapPosition(obj.x, obj.y);
-            let newMapPos = this.getMapPosition(dragX, dragY);
+            let mapPos = this.board.getMapPosition(obj.x, obj.y);
+            let newMapPos = this.board.getMapPosition(dragX, dragY);
             
             // make new map pos difference not bigger than 1 as we move cell by cell and cant jump over figures
             for (let axis of ['x', 'y']) {
@@ -131,7 +124,7 @@ export default class BlocksScene extends Phaser.Scene {
         });
 
         this.input.on('dragend', (pointer, obj) => {
-            let mapPos = this.getMapPosition(obj.x + this.board.blockSize/2, obj.y + this.board.blockSize/2); // get avarage pos
+            let mapPos = this.board.getMapPosition(obj.x + this.board.blockSize/2, obj.y + this.board.blockSize/2); // get avarage pos
             obj.setPosition(mapPos.x * this.board.blockSize, mapPos.y * this.board.blockSize);
             
             // update collision map
