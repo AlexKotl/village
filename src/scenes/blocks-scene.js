@@ -56,6 +56,7 @@ export default class BlocksScene extends Phaser.Scene {
         // add mouse
         this.mouse = new Mouse({
             scene: this,
+            board: this.board,
             x: -30,
             y: Math.round(this.board.size.height/2 - 1) * this.board.blockSize,
             key: 'mouse',
