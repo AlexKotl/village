@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
-import GameScene from './scenes/game-scene';
-import MapScene from './scenes/map-scene';
+import MenuScene from './scenes/menu-scene';
 import BlocksScene from './scenes/blocks-scene';
 
 var config = {
@@ -14,10 +13,9 @@ var config = {
         default: 'arcade',
         arcade: {
             debug: true,
-            //gravity: { y: 0 }
         }
     },
-    scene: [BlocksScene, MapScene, GameScene]
+    scene: [MenuScene, BlocksScene]
 };
 
 var game = new Phaser.Game(config);
