@@ -18,7 +18,10 @@ export default class BlocksScene extends Phaser.Scene {
         this.load.image('cat3', 'assets/sprites/cats/cat3.png');
         this.load.image('cat4', 'assets/sprites/cats/cat4.png');
         this.load.image('cat5', 'assets/sprites/cats/cat5.png');
-        this.load.image('mouse', 'assets/sprites/mouse.png');
+        this.load.spritesheet('mouse', 'assets/sprites/mouse.png', {
+            frameWidth: 54, 
+            frameHeight: 54,
+        });
     }
     
     getMapPosition(x, y) {
@@ -58,8 +61,12 @@ export default class BlocksScene extends Phaser.Scene {
         }
         
         // add mouse
-        this.mouse = new Mouse();
-        this.add.sprite(-20, Math.round(this.board.size.height/2) * this.board.blockSize, 'mouse');
+        this.mouse = new Mouse({
+            scene: this,
+            x: -30,
+            y: Math.round(this.board.size.height/2 - 1) * this.board.blockSize,
+            key: 'mouse',
+        });
         
         this.input.on('dragstart', (pointer, obj) => {
             // rebuild collision map - remove figure
@@ -133,6 +140,10 @@ export default class BlocksScene extends Phaser.Scene {
             this.board.generateBoard();
         });
 
+    }
+    
+    update() {
+        this.mouse.update();
     }
 
 }

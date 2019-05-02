@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import figures from '../objects/figures';
 import map from '../objects/map';
 
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 export default class Board {
     constructor(settings) {
