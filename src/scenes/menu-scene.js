@@ -9,10 +9,28 @@ export default class MenuScene extends Phaser.Scene {
         const x = this.game.canvas.width / 2;
         const y = this.game.canvas.height / 2;
         this.add.sprite(x, y, 'cats');
-        this.add.sprite(x, y, 'text');
-        this.add.sprite(x, y, 'menu-mouse');
+        const text = this.add.sprite(x, y, 'text').setAlpha(0);
+        const mouse = this.add.sprite(-x, y, 'menu-mouse');
         
         this.cameras.main.backgroundColor.setTo(255,255,255);
+        
+        // mouse appear
+        this.tweens.add({
+            targets: mouse,
+            x: x,
+            ease: 'Power1',
+            duration: 1000,
+            delay: 500
+        });
+        
+        // title 
+        this.tweens.add({
+            targets: text,
+            alpha: 1,
+            ease: 'Power1',
+            duration: 2000,
+            delay: 1500
+        });
         
         this.input.once('pointerdown', () => {
            this.scene.start('BlocksScene');
