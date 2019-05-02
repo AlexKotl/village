@@ -22,13 +22,15 @@ export default class BlocksScene extends Phaser.Scene {
             frameWidth: 54, 
             frameHeight: 54,
         });
+        this.load.image('win-text', 'assets/sprites/menu/win.png');
     }
 
     create() {
         // setup camera and background
-        this.cameras.main.scrollX = -170;
-        this.cameras.main.scrollY = -40;
-        this.add.sprite(-170, -40, 'room').setOrigin(0);
+        this.cameraOffset = {x: 170, y: 40};
+        this.cameras.main.scrollX = -this.cameraOffset.x;
+        this.cameras.main.scrollY = -this.cameraOffset.y;
+        this.add.sprite(-this.cameraOffset.x, -this.cameraOffset.y, 'room').setOrigin(0);
         
         this.graphics = this.add.graphics(); 
         
@@ -134,6 +136,36 @@ export default class BlocksScene extends Phaser.Scene {
             this.board.generateBoard();
         });
 
+    }
+    
+    finish() {
+        const graphics = this.add.graphics();
+        const text = this.add.sprite(this.game.canvas.width / 2 - this.cameraOffset.x, this.game.canvas.height / 2 - this.cameraOffset.y, 'win-text');
+        text.scaleX = 0;
+        text.scaleY = 0;
+        
+        graphics.fillStyle(0xffffff, 1);
+        const background = graphics.fillRect(-this.cameraOffset.x, -this.cameraOffset.y, this.game.canvas.width, this.game.canvas.height);
+        background.alpha = 0;
+        
+        this.tweens.add({
+            targets: text,
+            scaleX: 1,
+            scaleY: 1,
+            ease: 'Power1',
+            duration: 3000,
+        });
+        
+        this.tweens.add({
+            targets: background,
+            alpha: 1,
+            ease: 'Power1',
+            duration: 1000,
+        });
+        
+        setTimeout(() => {
+            this.scene.start('MenuScene');
+        }, 3000);
     }
     
     update() {

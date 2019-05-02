@@ -25,6 +25,7 @@ export default class Mouse extends Phaser.GameObjects.Sprite {
             // finish
             if (mousePos.x + 1 >= this.board.size.width) {
                 console.log('finish!');
+                this.scene.finish();
                 this.isRunning = false;
             }
             
