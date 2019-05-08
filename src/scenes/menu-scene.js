@@ -1,4 +1,8 @@
 export default class MenuScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'MenuScene'})
+    }
+    
     preload() {
         this.load.image('cats', 'assets/sprites/menu/cats.png');
         this.load.image('text', 'assets/sprites/menu/text.png');
