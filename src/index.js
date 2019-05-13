@@ -4,11 +4,14 @@ import BlocksScene from './scenes/blocks-scene';
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'phaser-game',
+    scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 480,
+    },
     pixelArt: false,
-    zoom: 1,
     physics: {
         default: 'arcade',
         arcade: {
