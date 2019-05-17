@@ -32,6 +32,9 @@ export default class BlocksScene extends Phaser.Scene {
         this.cameras.main.scrollY = -this.cameraOffset.y;
         this.add.sprite(-this.cameraOffset.x, -this.cameraOffset.y, 'room').setOrigin(0);
         
+        // level number
+        this.add.text(-150, 10, this.scene.settings.data.level, {font: "30px Courier"});
+        
         this.graphics = this.add.graphics(); 
         
         this.board = new Board({

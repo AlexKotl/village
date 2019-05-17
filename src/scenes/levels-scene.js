@@ -23,6 +23,9 @@ export default class LevelsScene extends Phaser.Scene {
                 if (level > 1) {
                     sprite.setAlpha(0.3);
                 }
+                else {
+                    
+                }
                 
                 level++;
             }
@@ -30,7 +33,9 @@ export default class LevelsScene extends Phaser.Scene {
         
         
         this.input.once('pointerdown', () => {
-           this.scene.start('BlocksScene');
+           this.scene.start('BlocksScene', {
+               level: 1,
+           });
        });
     }
 }
