@@ -38,6 +38,6 @@ export default class MenuScene extends Phaser.Scene {
         
         this.input.once('pointerdown', () => {
            this.scene.start('BlocksScene');
-       });
+        });
     }
 }

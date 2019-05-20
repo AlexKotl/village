@@ -18,13 +18,15 @@ export default class LevelsScene extends Phaser.Scene {
                 let spriteX = x * 250 + 100;
                 let spriteY = y * 170 + 150;
                 let sprite = this.add.sprite(spriteX, spriteY, 'clew').setScale(0.4);
+                sprite.setInteractive();
+                
                 this.add.text(spriteX - 20, spriteY - 30, level, {font: '80px Courier'});
                 
                 if (level > 1) {
-                    sprite.setAlpha(0.3);
+                    sprite.setAlpha(0.3).setTint(0xff0000);
                 }
                 else {
-                    
+                    sprite.levelNumber = level;
                 }
                 
                 level++;
@@ -32,10 +34,13 @@ export default class LevelsScene extends Phaser.Scene {
         }
         
         
-        this.input.once('pointerdown', () => {
-           this.scene.start('BlocksScene', {
-               level: 1,
-           });
+        this.input.on('pointerup', (pointer, obj) => {
+            const level = obj[0].levelNumber;
+            if (level !== undefined) {
+                this.scene.start('BlocksScene', {
+                    level: level,
+                });
+            }
        });
     }
 }
